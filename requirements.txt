@@ -1,0 +1,7 @@
+lightning
+numpy
+pandas
+scanpy
+scikit-learn
+torch
+torchmetrics
