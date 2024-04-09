@@ -25,7 +25,7 @@ Usage
 
 .. code-block:: bash
 
-    git clone https://github.com/your-username/your-repository.git
+    git clone https://github.com/theislab/sc_mae.git
 
 2. Install the required dependencies:
 
