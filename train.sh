@@ -1,8 +1,8 @@
 #!/bin/bash
 
-#SBATCH -J patient_representation
+#SBATCH -J sc_mae
 #SBATCH -p gpu_p
-#SBATCH --qos gpu_normal
+#SBATCH --qos gpu_long
 #SBATCH --gres=gpu:1
 #SBATCH -t 2-00:00:00
 #SBATCH --mem=150GB

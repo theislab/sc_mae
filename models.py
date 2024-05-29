@@ -322,7 +322,6 @@ class MLPAutoEncoder(BaseAutoEncoder):
         # masking
         self.masking_rate = masking_rate
         self.masking_strategy = masking_strategy
-        self.hvg_indices = None
 
     def _step(self, batch, training=True):
         targets = batch["X"]
@@ -360,9 +359,6 @@ class MLPAutoEncoder(BaseAutoEncoder):
 
     def training_step(self, batch, batch_idx):
         x_reconst, loss = self._step(batch)
-        # to do add hvg here!
-        if self.hvg_indices is not None:
-            batch["X"] = batch["X"][:, self.hvg_indices]
         self.log_dict(
             self.train_metrics(x_reconst, batch["X"]), on_epoch=True, on_step=True
         )
@@ -374,8 +370,6 @@ class MLPAutoEncoder(BaseAutoEncoder):
 
     def validation_step(self, batch, batch_idx):
         x_reconst, loss = self._step(batch, training=False)
-        if self.hvg_indices is not None:
-            batch["X"] = batch["X"][:, self.hvg_indices]
         self.log_dict(self.val_metrics(x_reconst, batch["X"]))
         self.log("val_loss", loss)
         if batch_idx % self.gc_freq == 0:
@@ -383,8 +377,6 @@ class MLPAutoEncoder(BaseAutoEncoder):
 
     def test_step(self, batch, batch_idx):
         x_reconst, loss = self._step(batch, training=False)
-        if self.hvg_indices is not None:
-            batch["X"] = batch["X"][:, self.hvg_indices]
         metrics = self.test_metrics(x_reconst, batch["X"])
         self.log_dict(metrics)
         self.log("test_loss", loss)
@@ -408,6 +400,4 @@ class MLPAutoEncoder(BaseAutoEncoder):
             return x_reconst, batch["X"]
 
     def get_input(self, batch):
-        if self.hvg_indices is not None:
-            batch["X"] = batch["X"][:, self.hvg_indices]
         return batch["X"]

@@ -41,7 +41,7 @@ class AdataDataset(Dataset):
         return batch
 
 class AdataDataModule(pl.LightningDataModule):
-    def __init__(self, adata, batch_key='scRNASeq_sample_ID', batch_size=2048, val_split=0.1, test_split=0.1):
+    def __init__(self, adata, class_key='scRNASeq_sample_ID', batch_size=2048, val_split=0.1, test_split=0.1):
         """
         LightningDataModule for handling data loading and processing for AdataDataset.
 
@@ -56,7 +56,7 @@ class AdataDataModule(pl.LightningDataModule):
         self.batch_size = batch_size
         self.val_split = val_split
         self.test_split = test_split
-        self.batch_key = batch_key
+        self.class_key = class_key
 
     def setup(self, stage=None):
         """
@@ -66,7 +66,7 @@ class AdataDataModule(pl.LightningDataModule):
             stage (str, optional): The current stage (e.g., 'fit', 'validate', 'test'). Defaults to None.
         """
         train_genes, val_test_genes, train_batches, val_test_batches = train_test_split(
-            self.adata.X, self.adata.obs[self.batch_key],
+            self.adata.X, self.adata.obs[self.class_key],
             test_size=self.val_split + self.test_split, random_state=42
         )
         val_genes, test_genes, val_batches, test_batches = train_test_split(
